@@ -107,6 +107,6 @@ class RoleController extends Controller
         $data = [];
         $data['roles'] = Role::all();
         $data['modules'] = Module::all();
-        return hresponse(true, $data, "Roles and Modules List !!");
+        return hresponse(true, $data, "Roles and Modules Lists !!");
     }
 }
