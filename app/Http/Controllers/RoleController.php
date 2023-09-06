@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\RoleHasPermission;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Models\Permission;
+use App\Models\Module;
 use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
@@ -94,5 +96,17 @@ class RoleController extends Controller
             return hresponse(true, $updatedData, "Role and Permission Added !!");
         }
         return hresponse(false, null, "Role not Found !!");
+    }
+
+    public function permissions(){
+        $data = Permission::all();
+        return hresponse(true, $data, "Permissions List !!");
+    }
+
+    public function rolesModules(){
+        $data = [];
+        $data['roles'] = Role::all();
+        $data['modules'] = Module::all();
+        return hresponse(true, $data, "Roles and Modules List !!");
     }
 }

@@ -80,6 +80,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     
     Route::patch('/role/update/{id}',[RoleController::class, 'updateRole']);
 
-    Route::patch('/role/edit/{id}',[RoleController::class, 'editRole']);
+    Route::get('/permissions',[RoleController::class, 'permissions']);
+
+    Route::get('/rolemodules',[RoleController::class, 'rolesModules']);
 
 });
