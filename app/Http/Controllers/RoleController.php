@@ -102,11 +102,11 @@ class RoleController extends Controller
         $data = Permission::all();
         return hresponse(true, $data, "Permissions List !!");
     }
-
+// test
     public function rolesModules(){
         $data = [];
         $data['roles'] = Role::all();
         $data['modules'] = Module::all();
-        return hresponse(true, $data, "Roles and Modules Lists !!");
+        return hresponse(true, $data, "Roles and Modules Lists !!");  
     }
 }
