@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\PasswordResetController;
 /*
 |--------------------------------------------------------------------------
@@ -23,33 +25,13 @@ use App\Http\Controllers\PasswordResetController;
 //     return "Laravel API";
 // });
 
-// Route::get('/students',[StudentController::class, 'index']);
-
-// Route::get('/students/{id}',[StudentController::class, 'show']);
-
-// Route::put('/students/{id}',[StudentController::class, 'update']);
-
-// Route::post('/students',[StudentController::class, 'store']);
-
-// Route::get('/students/search/{city}',[StudentController::class, 'search']);
-
-// Route::delete('/students/{id}',[StudentController::class, 'destroy']);
-
 Route::post('/register',[UserController::class,'register']);
 
 Route::post('/login',[UserController::class,'login']);
 
-Route::post('client/enquiry',[UserController::class, 'enquiry']); 
+Route::post('/admin/login',[AdminController::class,'login']);
 
-
-
-
-
-
-
-
-
-
+Route::post('/client/enquiry/add',[EnquiryController::class, 'addEnquiry']); 
 
 
 Route::middleware(['auth:sanctum'])->group(function(){
@@ -70,7 +52,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::delete('/client/{id}',[UserController::class, 'deleteClient']);
 
-    Route::patch('client/status/upate/{id}',[UserController::class, 'clientStatusUpdate']);
+    Route::patch('/client/status/upate/{id}',[UserController::class, 'clientStatusUpdate']);
 
     Route::post('/role/add',[RoleController::class, 'addRole']);
 

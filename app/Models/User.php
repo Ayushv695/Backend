@@ -6,16 +6,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Laravel\Sanctum\HasApiTokens;
 
-class Admin extends Authenticatable
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
 
-    protected $table = 'admins';
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -25,8 +24,16 @@ class Admin extends Authenticatable
         'name',
         'email',
         'password',
+        'user_type',
         'status',
-        'role',
+        'roleID',
+        'collegeCode',
+        'address',
+        'stateID',
+        'countryID',
+        'cityID',
+        'contactPerson',
+        'phoneNo',
     ];
 
     /**
@@ -49,4 +56,13 @@ class Admin extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function state():HasOne
+    {
+        return $this->hasOne(State::class,'stateID','stateID');
+    }
+
+    public function city():HasOne
+    {
+        return $this->hasOne(City::class,'cityID','cityID');
+    }
 }
