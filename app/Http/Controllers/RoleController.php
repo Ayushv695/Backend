@@ -98,15 +98,11 @@ class RoleController extends Controller
         return hresponse(false, null, "Role not Found !!");
     }
 
-    public function permissions(){
-        $data = Permission::all();
-        return hresponse(true, $data, "Permissions List !!");
-    }
-// test
-    public function rolesModules(){
+    public function rolesModulesPermissions(){
         $data = [];
         $data['roles'] = Role::all();
         $data['modules'] = Module::all();
-        return hresponse(true, $data, "Roles and Modules Lists !!");  
+        $data['permissions'] = Permission::all();
+        return hresponse(true, $data, "Roles and Modules List !!");  
     }
 }

@@ -31,9 +31,35 @@ Route::post('/login',[UserController::class,'login']);
 
 Route::post('/admin/login',[AdminController::class,'login']);
 
-Route::post('/client/enquiry/add',[EnquiryController::class, 'addEnquiry']); 
+// _________________________________Enquiry_____________________________________________
+
+Route::middleware(['auth:sanctum'])->group(function(){
+
+    Route::post('/enquiry/add',[EnquiryController::class, 'addEnquiry']); 
+
+    Route::delete('/enquiry/delete/{id}',[EnquiryController::class, 'deleteEnquiry']);
+
+    Route::get('/all-enquiries',[EnquiryController::class, 'showEnquiries']);
+
+    Route::patch('/enquiry/update/step/{id}',[EnquiryController::class, 'updateEnquiryStep']);
+
+});
 
 
+// _____________________________ Role____________________________________________________
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::post('/role/add',[RoleController::class, 'addRole']);
+
+    Route::get('/role/view/{id}',[RoleController::class, 'viewRole']);
+
+    Route::delete('/role/delete/{id}',[RoleController::class, 'deleteRole']);
+    
+    Route::patch('/role/update/{id}',[RoleController::class, 'updateRole']);
+
+    Route::get('/roles-modules-permissions',[RoleController::class, 'rolesModulesPermissions']);
+});
+
+// _______________________________ Client _______________________________________________
 Route::middleware(['auth:sanctum'])->group(function(){
 
     // Route::get('/students/{id}',[StudentController::class, 'show']);
@@ -53,17 +79,5 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::delete('/client/{id}',[UserController::class, 'deleteClient']);
 
     Route::patch('/client/status/upate/{id}',[UserController::class, 'clientStatusUpdate']);
-
-    Route::post('/role/add',[RoleController::class, 'addRole']);
-
-    Route::get('/role/view/{id}',[RoleController::class, 'viewRole']);
-
-    Route::delete('/role/delete/{id}',[RoleController::class, 'deleteRole']);
-    
-    Route::patch('/role/update/{id}',[RoleController::class, 'updateRole']);
-
-    Route::get('/permissions',[RoleController::class, 'permissions']);
-
-    Route::get('/rolemodules',[RoleController::class, 'rolesModules']);
 
 });
