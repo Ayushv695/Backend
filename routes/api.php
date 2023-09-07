@@ -8,6 +8,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\SchoolController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,9 +40,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::delete('/enquiry/delete/{id}',[EnquiryController::class, 'deleteEnquiry']);
 
-    Route::get('/all-enquiries',[EnquiryController::class, 'showEnquiries']);
+    Route::get('/show-all-enquiries',[EnquiryController::class, 'showAllEnquiries']);
 
     Route::patch('/enquiry/update/step/{id}',[EnquiryController::class, 'updateEnquiryStep']);
+
+    Route::put('/enquiry/update/{id}',[EnquiryController::class, 'updateEnquiry']);
 
 });
 
@@ -56,7 +59,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     
     Route::patch('/role/update/{id}',[RoleController::class, 'updateRole']);
 
+    Route::patch('/role/update/status/{id}',[RoleController::class, 'roleStatusUpdate']);
+
     Route::get('/roles-modules-permissions',[RoleController::class, 'rolesModulesPermissions']);
+
 });
 
 // _______________________________ Client _______________________________________________
@@ -79,5 +85,19 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::delete('/client/{id}',[UserController::class, 'deleteClient']);
 
     Route::patch('/client/status/upate/{id}',[UserController::class, 'clientStatusUpdate']);
+
+});
+
+// _________________________________School_____________________________________________
+
+Route::middleware(['auth:sanctum'])->group(function(){
+
+    Route::post('/school/register',[SchoolController::class, 'addSchool']); 
+
+    Route::delete('/school/delete/{id}',[SchoolController::class, 'deleteSchool']);
+
+    Route::get('/show-all-schools',[SchoolController::class, 'showAllSchools']);
+
+    Route::put('/school/update/{id}',[SchoolController::class, 'updateSchool']);
 
 });

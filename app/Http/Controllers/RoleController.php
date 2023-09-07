@@ -98,6 +98,23 @@ class RoleController extends Controller
         return hresponse(false, null, "Role not Found !!");
     }
 
+    public function roleStatusUpdate(Request $request, string $id){
+        if($request->status){
+            $client = Role::find($id);
+        
+            if($client){
+                $client->first();
+                $client->status = $request->status;
+                $client->save();
+                return hresponse(true, $client, 'Role Status Updated !!');
+            }
+            else{
+                return hresponse(false, null, 'Role Not Found !!');
+            }
+        }
+        return hresponse(false, null, 'Please select status !!');
+    }
+
     public function rolesModulesPermissions(){
         $data = [];
         $data['roles'] = Role::all();

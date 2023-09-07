@@ -125,9 +125,10 @@ class UserController extends Controller
         else{
             $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->where('user_Type','1')->paginate($limit);
         }
+       $data = $users->toArray()['data'];
         $res['users'] = $users;
         $res['totalRecord'] = $users->count();
-        if($users){
+        if($data){
     
             return hresponse(true, $res, 'All clients list !!');
         }
