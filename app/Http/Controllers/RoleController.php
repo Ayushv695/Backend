@@ -93,7 +93,7 @@ class RoleController extends Controller
             }
             $updatedData = Role::with('permissions:role_id,permissions')->findOrFail($request->id);
             
-            return hresponse(true, $updatedData, "Role and Permission Added !!");
+            return hresponse(true, $updatedData, "Role and Permission Updated !!");
         }
         return hresponse(false, null, "Role not Found !!");
     }

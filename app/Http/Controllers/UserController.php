@@ -114,18 +114,19 @@ class UserController extends Controller
         $status = $req->status ? $req->status : "";
 
         if(!empty($search) && $status == ""){
-            $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->where('name','LIKE',"%".$search."%")->where('user_Type','=','1')->paginate($limit);
+            $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->where('name','LIKE',"%".$search."%")->orWhere('email','LIKE',"%".$search."%")->paginate($limit);
         }
         else if($status != "" && $search == ""){
-            $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->where('status',"=","$status")->Where('user_Type','=','1')->paginate($limit);
+            $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->where('status',"=","$status")->paginate($limit);
         }
         else if(!empty($search) && !empty($status)){
-            $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->with(['state','city'])->where('status',"=","$status")->where('name','LIKE',"%".$search."%")->Where('user_Type','=','1')->paginate($limit);
+            $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->where('status',"=",$status);
+            $users = $users->where('name','LIKE',"%".$search."%")->orWhere('email','LIKE',"%".$search."%")->paginate($limit);
         }
         else{
-            $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->where('user_Type','1')->paginate($limit);
+            $users = User::with(['state:stateID,stateName','city:cityID,cityName'])->paginate($limit);
         }
-       $data = $users->toArray()['data'];
+        $data = $users;
         $res['users'] = $users;
         $res['totalRecord'] = $users->count();
         if($data){

@@ -27,7 +27,7 @@ class EnquiryController extends Controller
             $enquiries = Enquiry::where('status',"=","$status")->orWhere('clientID','LIKE',"%".$search."%")->paginate($limit);
         }
         else if(!empty($search) && !empty($status)){
-        //     $users = DB::table('enquiries')
+        //     $enquiries = DB::table('enquiries')
         //     ->where('status', '=', $status)
         //    ->where(function (Builder $query) {
         //        $query->where('name', 'LIKE',"%".$GLOBALS['search']."%")

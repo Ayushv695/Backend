@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\School;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use SebastianBergmann\CodeCoverage\Node\Builder;
+// use SebastianBergmann\CodeCoverage\Node\Builder;
 
 class SchoolController extends Controller
 {
@@ -90,43 +91,48 @@ class SchoolController extends Controller
         }
     }
 
-    public function showAllSchools(Request $req){
+    public function showAllSchools(Request $request){
         $res = [];
-        $search = $req->search ? $req->search : "";
-        $limit = $req->limit ? $req->limit : 17;
-        $status = $req->status ? $req->status : "";
-     
-        if(!empty($search) && $status == ""){
-            $schools = School::where('schoolName','LIKE',"%".$search."%")->orWhere('schoolCode','LIKE',"%".$search."%")->paginate($limit);
-        }
-        else if($status != "" && $search == ""){
-            $schools = School::where('status',"=","$status")->orWhere('schoolCode','LIKE',"%".$search."%")->paginate($limit);
-        }
-        
-        else if(!empty($search) && !empty($status)){
-        //     $users = DB::table('schools')
-        //     ->where('status', '=', $status)
-        //    ->where(function (Builder $query) {
-        //        $query->where('schoolName', 'LIKE',"%".$req->search."%")
-        //              ->orWhere('schoolCode', '=', $req->search);
-        //    })
-        //    ->paginate($limit);
+        $search = $request->search ? $request->search : "";
+        $limit = $request->limit ? $request->limit : 17;
+        $status = $request->status ? $request->status : "";
 
-            // $schools = School::where([
-            //     ['status', '=', $status],
-            //     ['schoolName', 'LIKE',"%".$search."%"],
-            //     ['schoolCode', 'LIKE',"%".$search."%"],
-            // ])->orWhere('schoolCode','LIKE',"%".$search."%")->paginate($limit);
-            // $schools = School::where('status',"=","$status")->where('schoolName','LIKE',"%".$search."%")->orWhere('schoolCode','LIKE',"%".$search."%")->paginate($limit);
-        }
-        else{
-            $schools = School::paginate($limit);
-        }
-        $data = $schools->toArray()['data'];
+        $schools = School::query();
+
+        $schools->when($request->has('status'), function ($q) use ($request) {
+            $q->where('status','=', $request->status);
+        });
+
+        $schools->when($request->has('search') , function ($q) use ($request) {
+            $q->orWhere('schoolName','LIKE',"%".$request->search."%")
+            ->orWhere('schoolCode',$request->search);
+        });
+    
+        $schools = $schools->where('status','=',$status)->where(function($query) use ($request) {
+            // dd($request->search);
+            $query->where('schoolCode','=',"$request->search")
+                ->orWhere('schoolName','LIKE',"%".$request->search."%");
+        });
+
+        // if(!empty($search) && $status == ""){
+        //     $schools = School::where('schoolName','LIKE',"%".$search."%")->orWhere('schoolCode',$search)->orWhere('email','LIKE',"%".$search."%")->paginate($limit);
+        // }
+
+        // else if($status != "" && $search == ""){
+        //     $schools = School::where('status',"=","$status")->paginate($limit);
+        // }
+
+        // else if(!empty($search) && !empty($status)){
+        //     $schools = School::where('status',"$status")->where('schoolName','LIKE',"%".$search."%")->orWhere('schoolCode','LIKE',$search)->paginate($limit);
+        // }
+        // else{
+        //     $schools = School::paginate($limit);
+        // }
+        $data = $schools->paginate($limit);
         $res['schools'] = $data;
         $res['totalRecord'] = $schools->count();
-        if($data){
-            return hresponse(true, $schools, 'All Schools list !!');
+        if($schools){
+            return hresponse(true, $res, 'All Schools list !!');
         }
         return hresponse(false, null, 'No Record Found !!');
     }

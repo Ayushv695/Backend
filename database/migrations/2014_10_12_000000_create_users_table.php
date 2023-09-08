@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('countryID')->nullable();
             $table->string('cityID')->nullable();
             $table->string('contactPerson')->nullable();
-            $table->string('phoneNo')->nullable(); 
+            $table->string('phoneNo')->unique()->nullable(); 
             $table->rememberToken();
             $table->timestamps();
         });
