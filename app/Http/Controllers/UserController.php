@@ -195,15 +195,23 @@ class UserController extends Controller
         return hresponse(false, null, 'Please select status !!');
     }
 // _________________________________________________________________Show City _______________________________________________
-    // public function showCity($stateID){
-    //    if($stateID){
-    //     $city = City::where('stateID','=',$stateID)->get();
-    //     if(!empty($city->toArray())){
-    //         return hresponse(true, $city, 'All Available Cities list !!');
-    //     }
-    //     return hresponse(false, null, 'City Not Found !!');
-    //    }
-    //     return hresponse(false, null, 'Please select correct State !!');
-    // }
+    public function showCity($stateID){
+       if($stateID){
+        $state = State::with(['city:stateID,cityName'])->where('stateID','=',$stateID)->get();
+        if(!empty($state)){
+            return hresponse(true, $state, 'All Available States with their corresponding Cities list !!');
+        }
+        return hresponse(false, null, 'State Not Found !!');
+       }
+        return hresponse(false, null, 'Please select correct State !!');
+    }
+
+    public function showState(){
+         $state = State::all();
+         if(!empty($state)){
+             return hresponse(true, $state, 'All Available States list !!');
+         }
+         return hresponse(false, null, 'State Not Found !!');
+     }
 }
 

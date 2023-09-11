@@ -68,8 +68,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
 // _______________________________ Client _______________________________________________
 Route::middleware(['auth:sanctum'])->group(function(){
 
-    // Route::get('/students/{id}',[StudentController::class, 'show']);
-
     // Route::post('/students',[StudentController::class, 'store']);
 
     Route::post('/logout',[UserController::class, 'logout']);
@@ -85,6 +83,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::delete('/client/{id}',[UserController::class, 'deleteClient']);
 
     Route::patch('/client/status/upate/{id}',[UserController::class, 'clientStatusUpdate']);
+
+    Route::get('/client/city/{id}',[UserController::class, 'showCity']);
+    
+    Route::get('/client/state',[UserController::class, 'showState']);
 
 });
 

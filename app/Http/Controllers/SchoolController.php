@@ -94,44 +94,40 @@ class SchoolController extends Controller
     public function showAllSchools(Request $request){
         $res = [];
         $search = $request->search ? $request->search : "";
+        var_dump($search);
         $limit = $request->limit ? $request->limit : 17;
         $status = $request->status ? $request->status : "";
 
         $schools = School::query();
 
-        $schools->when($request->has('status'), function ($q) use ($request) {
-            $q->where('status','=', $request->status);
-        });
+        // $schools->when($request->has('status'), function ($q) use ($request) {
+        //     $q->where('status','=', $request->status);
+        // });
 
-        $schools->when($request->has('search') , function ($q) use ($request) {
-            $q->orWhere('schoolName','LIKE',"%".$request->search."%")
-            ->orWhere('schoolCode',$request->search);
-        });
+        // $schools->when($request->has('search') , function ($q) use ($request) {
+        //     $q->orWhere('schoolName','LIKE',"%".$request->search."%")
+        //     ->orWhere('schoolCode',$request->search);
+        // });
     
-        $schools = $schools->where('status','=',$status)->where(function($query) use ($request) {
-            // dd($request->search);
-            $query->where('schoolCode','=',"$request->search")
-                ->orWhere('schoolName','LIKE',"%".$request->search."%");
-        });
+        
+        // $schools = $schools->where('status','=',$status)->where(function($query) use ($request) {
+        //     // dd($request->search);
+        //     $query->where('schoolCode','=',"$request->search")
+        //         ->orWhere('schoolName','LIKE',"%".$request->search."%");
+        // });
 
-        // if(!empty($search) && $status == ""){
-        //     $schools = School::where('schoolName','LIKE',"%".$search."%")->orWhere('schoolCode',$search)->orWhere('email','LIKE',"%".$search."%")->paginate($limit);
-        // }
-
-        // else if($status != "" && $search == ""){
-        //     $schools = School::where('status',"=","$status")->paginate($limit);
-        // }
-
-        // else if(!empty($search) && !empty($status)){
-        //     $schools = School::where('status',"$status")->where('schoolName','LIKE',"%".$search."%")->orWhere('schoolCode','LIKE',$search)->paginate($limit);
-        // }
-        // else{
-        //     $schools = School::paginate($limit);
-        // }
+        if($search ){
+            $schools = $schools->where('schoolName','LIKE',"%".$search."%")->orWhere('schoolCode',$search);
+        }
+        if($status){
+            $schools = $schools->where('status',$status);
+        }
+        
         $data = $schools->paginate($limit);
-        $res['schools'] = $data;
+        $res['schools'] = $data->toArray();
         $res['totalRecord'] = $schools->count();
-        if($schools){
+
+        if($res['schools']['data']){
             return hresponse(true, $res, 'All Schools list !!');
         }
         return hresponse(false, null, 'No Record Found !!');
